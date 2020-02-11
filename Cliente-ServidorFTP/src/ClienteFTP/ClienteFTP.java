@@ -21,13 +21,13 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+
 
 public class ClienteFTP extends JFrame implements ListSelectionListener, MouseListener, ActionListener {
 
@@ -53,6 +53,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	/**
 	 * Create the frame.
 	 */
+	
 	public ClienteFTP() throws IOException
 	{
 		acumulador_directorios[0] = "/";
