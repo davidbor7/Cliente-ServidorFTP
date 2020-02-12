@@ -16,8 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.awt.Dimension;
@@ -196,6 +198,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 
 		// --- AÑADIMOS LOS LISTENER---
+		boton_subir_fichero.addActionListener(this);
 		boton_bajar_fichero.addActionListener(this);
 		boton_renombrar_carpeta.addActionListener(this);
 		boton_eliminar_carpeta.addActionListener(this);
@@ -314,6 +317,34 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		}
 
 	}
+	
+	private boolean SubirFichero(String archivo, String soloNombre) throws IOException 
+	{
+		cliente.setFileType(FTP.BINARY_FILE_TYPE);
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(archivo));
+		boolean ok = false;
+		//directorio de trabajo actual
+		cliente.changeWorkingDirectory(directorioActual);
+		if (cliente.storeFile(soloNombre, in)) 
+		{
+			String s = " " + soloNombre + " => Subido correctamente...";
+			JOptionPane.showMessageDialog(null, s);
+			FTPFile[] ff2 = null;
+			//obtener ficheros del directorio actual
+			ff2 = cliente.listFiles();
+			
+			//llenar la lista con los ficheros del directorio actual	
+			//Obteniendo ficheros y directorios del directorio actual
+			files = cliente.listFiles();
+			llenarLista(files);
+			
+		}
+		else
+			JOptionPane.showMessageDialog(null, "=> Error al subir el archivo...");
+		return ok;
+	}// final de SubirFichero
+	
+	
 
 	public void valueChanged(ListSelectionEvent le) 
 	{
@@ -516,7 +547,35 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_subir_fichero))
 		{
-
+			
+			JFileChooser f;
+			File file;
+			f = new JFileChooser();
+			//solo se pueden seleccionar ficheros
+			f.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			//t�tulo de la ventana
+			f.setDialogTitle("Selecciona el fichero a subir al servidor FTP");
+			//se muestra la ventana
+			int returnVal = f.showDialog(f, "Cargar");
+			if (returnVal == JFileChooser.APPROVE_OPTION) 
+			{
+				//fichero seleccionado
+				file = f.getSelectedFile();
+				//nombre completo del fichero
+				String archivo = file.getAbsolutePath();
+				//solo nombre del fichero
+				String nombreArchivo = file.getName();
+				try 
+				{
+					SubirFichero(archivo, nombreArchivo);
+				}
+				catch (IOException e1) 
+				{
+					e1.printStackTrace(); 
+				}
+			}
+			
+			
 		}
 
 
