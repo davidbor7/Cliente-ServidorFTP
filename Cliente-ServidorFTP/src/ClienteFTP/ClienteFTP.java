@@ -264,9 +264,10 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		{
 			//Se asigna el modelo al JList
 			//Se muestra en pantalla la lista de ficheros
+			
 			lista.setModel(modeloLista);
 
-			System.out.println("El directorioSeleccionado vale: " + directorioActual);
+			//System.out.println("El directorioSeleccionado vale: " + directorioActual);
 		}
 		catch (Exception e ) 
 		{
@@ -281,8 +282,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (partes[0].equals("(DIR)")) 
 		{
-			System.out.println(partes[0]);
-			System.out.println(partes[1]);
+			//System.out.println(partes[0]);
+			//System.out.println(partes[1]);
 			return true;
 		}
 		else 
@@ -376,7 +377,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 					//VA ACUMULANDO LAS RUTAS RECORRIDAS POR EL USUARIO
 					directorioActual = directorioActual  + partes[1] + "/";	 // partes[1] SELECIONA EL NOMBRE DE LA CARPETA Y ELIMINA EL PREFIJO (DIR)
 
-					System.out.println("El directorio actuar es: " + directorioActual);
+					//System.out.println("El directorio actuar es: " + directorioActual);
 					laber_directorio.setText(directorioActual);
 
 					contador++;
@@ -474,7 +475,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 					String directorio_a_eliminar = directorioActual + partes[1];
 
-					System.out.println(directorio_a_eliminar);
+					//System.out.println(directorio_a_eliminar);
 
 					try
 					{
@@ -550,7 +551,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 						//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE EDITA UNA CARPETA
 						for (int i = (contador+1); i < acumulador_directorios.length; i++) 
 						{		
-							System.out.println(acumulador_directorios[i]);
+							//System.out.println(acumulador_directorios[i]);
 							acumulador_directorios[i] = null;
 						}
 					} catch (Exception e) 
@@ -700,7 +701,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 						//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE EDITA UNA CARPETA
 						for (int i = (contador+1); i < acumulador_directorios.length; i++) 
 						{		
-							System.out.println(acumulador_directorios[i]);
+							//System.out.println(acumulador_directorios[i]);
 							acumulador_directorios[i] = null;
 						}
 					} catch (Exception e) 
@@ -736,7 +737,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					contador--;
 
-					System.out.println(acumulador_directorios[contador]);
+					//System.out.println(acumulador_directorios[contador]);
 					directorioActual= acumulador_directorios[contador];
 					laber_directorio.setText(directorioActual);
 					//SE ESTABLECE EL DIRECTORIO DE TRABAJO ACTUAL
@@ -763,7 +764,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 					if (acumulador_directorios[contador+1]!= null) 
 					{
 						contador++;
-						System.out.println(acumulador_directorios[contador]);
+						//System.out.println(acumulador_directorios[contador]);
 						directorioActual= acumulador_directorios[contador];
 						laber_directorio.setText(directorioActual);
 						//SE ESTABLECE EL DIRECTORIO DE TRABAJO ACTUAL
