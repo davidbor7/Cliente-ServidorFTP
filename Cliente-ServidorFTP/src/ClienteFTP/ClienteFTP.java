@@ -1,42 +1,15 @@
 package ClienteFTP;
 
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.awt.Dimension;
-
-
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.SystemColor;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import java.awt.Color;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
 public class ClienteFTP extends JFrame implements ListSelectionListener, MouseListener, ActionListener {
 
@@ -52,7 +25,6 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	private static String directorioActual = directorioInicial;//DIRECTORIO SELECCIONADO EN CADA MOMENTO
 	private JButton boton_adelantar;
 	private JButton boton_refrescar;
-	private boolean login;
 	private JButton boton_volver;
 	private JButton boton_home;
 	private static int contador;
@@ -183,7 +155,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		//Conexión al servidor
 		cliente.connect(servidor); 
 		cliente.enterLocalPassiveMode();
-		login = cliente.login(user, pasw); //Si el boolean login devuelve true, significa que se ha conectado exitosamente.
+		cliente.login(user, pasw); //Si el boolean login devuelve true, significa que se ha conectado exitosamente.
 
 
 		// --- RELLENAMOS LA JLIST POR PRIMERA VEZ---
@@ -333,7 +305,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					String m = nombreFichero + " => Eliminado correctamente... ";
 					JOptionPane.showMessageDialog(null, m);
-					
+
 					//llenar la lista con los ficheros del directorio actual	
 					//Obteniendo ficheros y directorios del directorio actual
 					//RECARGAR LA LISTA
@@ -350,8 +322,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}
 		}
 	}// Final de BorrarFichero
-	
-	
+
+
 	private boolean SubirFichero(String archivo, String soloNombre) throws IOException 
 	{
 		cliente.setFileType(FTP.BINARY_FILE_TYPE);
@@ -491,49 +463,50 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_eliminar_carpeta))
 		{
+		
+				String nombreCarpeta = lista.getSelectedValue().toString();
 
-			String nombreCarpeta = lista.getSelectedValue().toString();
-
-			if (comprueba_si_es_directorio(nombreCarpeta)) //SI ENTRA AQUÍ SIGNIFICA QUE ESTAMOS QUERIENDO ELIMINAR UNA CARPETA
-			{
-				String[] partes = lista.getSelectedValue().toString().split(" ");
-
-				String directorio_a_eliminar = directorioActual + partes[1];
-
-				System.out.println(directorio_a_eliminar);
-
-				try
+				if (comprueba_si_es_directorio(nombreCarpeta)) //SI ENTRA AQUÍ SIGNIFICA QUE ESTAMOS QUERIENDO ELIMINAR UNA CARPETA
 				{
+					String[] partes = lista.getSelectedValue().toString().split(" ");
 
-					if(cliente.removeDirectory(directorio_a_eliminar)) 
+					String directorio_a_eliminar = directorioActual + partes[1];
+
+					System.out.println(directorio_a_eliminar);
+
+					try
 					{
-						String m = nombreCarpeta.trim()+" => Se ha eliminado correctamente ...";
-						JOptionPane.showMessageDialog(null, m);
 
-						//REFRESCAR LISTA CON LA NUEVA CARPETA
-						files = cliente.listFiles();
-						llenarLista(files);
-						//---------------------------------------------
+						if(cliente.removeDirectory(directorio_a_eliminar)) 
+						{
+							String m = nombreCarpeta.trim()+" => Se ha eliminado correctamente ...";
+							JOptionPane.showMessageDialog(null, m);
 
-						//---------------BORRAR TODAS LAS RUTAS A PARTIR DE LA CARPETA BORRADA-----
-						//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE BORRA UNA CARPETA
-						for (int i = (contador + 1); i < acumulador_directorios.length; i++) 
-						{						
-							acumulador_directorios[i] = null;
+							//REFRESCAR LISTA CON LA NUEVA CARPETA
+							files = cliente.listFiles();
+							llenarLista(files);
+							//---------------------------------------------
+
+							//---------------BORRAR TODAS LAS RUTAS A PARTIR DE LA CARPETA BORRADA-----
+							//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE BORRA UNA CARPETA
+							for (int i = (contador + 1); i < acumulador_directorios.length; i++) 
+							{						
+								acumulador_directorios[i] = null;
+
+							}
 
 						}
-
-					}
-					else 
+						else 
+						{
+							JOptionPane.showMessageDialog(null, nombreCarpeta.trim() + " => No se ha podido eliminar ...");
+						}
+					} catch (Exception e)
 					{
-						JOptionPane.showMessageDialog(null, nombreCarpeta.trim() + " => No se ha podido eliminar ...");
+						System.out.println(e.getMessage());
 					}
-				} catch (Exception e)
-				{
-					System.out.println(e.getMessage());
-				}
-			}			
-		}
+				} 
+			}
+
 
 
 		if (ae.getSource().equals(boton_renombrar_carpeta))
@@ -575,7 +548,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}	
 			else 
 			{
-				 JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
+				JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
 			}
 		}
 
@@ -623,13 +596,13 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 				try 
 				{			
-										
+
 					String directorio_fichero_a_descargar = lista.getSelectedValue().toString();
 
 					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
-					
+
 					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
-					
+
 					DescargarFichero(directorioActual + directorio_fichero_a_descargar , directorio_fichero_a_descargar);
 
 
@@ -642,20 +615,19 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_borrar_fichero))
 		{
-
 			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
 			{
 				//System.out.println("Es un archivo");
 
 				try 
 				{			
-										
+
 					String directorio_fichero_a_descargar = lista.getSelectedValue().toString();
 
 					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
-					
+
 					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
-					
+
 					BorrarFichero(directorioActual + directorio_fichero_a_descargar , directorio_fichero_a_descargar);
 
 
@@ -663,10 +635,11 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					System.out.println(e.getMessage());
 				}								
-			}				
-		}
-		
-		
+			}			
+		}						
+
+
+
 		if (ae.getSource().equals(boton_renombrar_fichero)) 
 		{
 			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
@@ -675,7 +648,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 
 				//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
-				
+
 				//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
 
 				try 
@@ -701,13 +674,13 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}
 			else 
 			{
-				 JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
+				JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
 			}
 		}
-		
-		
-		
-		
+
+
+
+
 
 
 		// -----------------BOTONES DE CABECERA---------------------
