@@ -626,146 +626,116 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 					} catch (Exception e) 
 					{
 						System.out.println(e.getMessage());
-					}
-				}else 
-				{
-					JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
-				}
-			}	
-		}
-		else 
-		{
-			JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
-		}
-	
-	if (ae.getSource().equals(boton_borrar_fichero))
-	{
-
-		if (!lista.isSelectionEmpty()) 
-		{
-			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
+					}								
+				}	
+			}
+			else 
 			{
+				JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
+			}
+		}
 
-				try 
-				{			
+		if (ae.getSource().equals(boton_borrar_fichero))
+		{
 
-					String directorio_fichero_a_descargar = lista.getSelectedValue().toString();
+			if (!lista.isSelectionEmpty()) 
+			{
+				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
+				{
+
+					try 
+					{			
+
+						String directorio_fichero_a_descargar = lista.getSelectedValue().toString();
+
+						//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
+
+						//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
+
+						BorrarFichero(directorioActual + directorio_fichero_a_descargar , directorio_fichero_a_descargar);
+
+
+					} catch (Exception e) 
+					{
+						System.out.println(e.getMessage());
+					}
+
+				}
+				else 
+				{
+					JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
+				}
+			}else
+			{
+				JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
+			}
+		}						
+
+
+
+		if (ae.getSource().equals(boton_renombrar_fichero)) 
+		{
+
+			if (!lista.isSelectionEmpty()) 
+			{
+				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
+				{
+					String nombreNuevoFichero = JOptionPane.showInputDialog(null,"Introduce el nuevo nombre del fichero","");
+
 
 					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
 
 					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
 
-					BorrarFichero(directorioActual + directorio_fichero_a_descargar , directorio_fichero_a_descargar);
+					try 
+					{
+						cliente.rename(directorioActual + lista.getSelectedValue().toString(), directorioActual + nombreNuevoFichero);
 
+						//REFRESCAR LISTA CON LA NUEVA CARPETA
+						files = cliente.listFiles();
+						llenarLista(files);
+						//---------------------------------------------
 
-				} catch (Exception e) 
-				{
-					System.out.println(e.getMessage());
-				}
-
-			}
-			else 
-			{
-				JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
-			}
-		}else
-		{
-			JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
-		}
-	}						
-
-
-
-	if (ae.getSource().equals(boton_renombrar_fichero)) 
-	{
-
-		if (!lista.isSelectionEmpty()) 
-		{
-			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
-			{
-				String nombreNuevoFichero = JOptionPane.showInputDialog(null,"Introduce el nuevo nombre del fichero","");
-
-
-				//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
-
-				//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
-
-				try 
-				{
-					cliente.rename(directorioActual + lista.getSelectedValue().toString(), directorioActual + nombreNuevoFichero);
-
-					//REFRESCAR LISTA CON LA NUEVA CARPETA
-					files = cliente.listFiles();
-					llenarLista(files);
-					//---------------------------------------------
-
-					//---------------BORRAR TODAS LAS RUTAS A PARTIR DE LA CARPETA EDITADA-----
-					//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE EDITA UNA CARPETA
-					for (int i = (contador+1); i < acumulador_directorios.length; i++) 
-					{		
-						System.out.println(acumulador_directorios[i]);
-						acumulador_directorios[i] = null;
+						//---------------BORRAR TODAS LAS RUTAS A PARTIR DE LA CARPETA EDITADA-----
+						//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE EDITA UNA CARPETA
+						for (int i = (contador+1); i < acumulador_directorios.length; i++) 
+						{		
+							System.out.println(acumulador_directorios[i]);
+							acumulador_directorios[i] = null;
+						}
+					} catch (Exception e) 
+					{
+						System.out.println(e.getMessage());
 					}
-				} catch (Exception e) 
+				}
+				else 
 				{
-					System.out.println(e.getMessage());
+					JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
 				}
 			}
 			else 
 			{
-				JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
-			}
-		}
-		else 
-		{
-			JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
-		}
-
-
-	}
-
-
-
-
-
-
-	// -----------------BOTONES DE CABECERA---------------------
-
-	if (ae.getSource().equals(boton_volver)) 
-	{
-		try 
-		{			
-			if (contador > 0) 
-			{
-				contador--;
-
-				System.out.println(acumulador_directorios[contador]);
-				directorioActual= acumulador_directorios[contador];
-				laber_directorio.setText(directorioActual);
-				//SE ESTABLECE EL DIRECTORIO DE TRABAJO ACTUAL
-				cliente.changeWorkingDirectory(acumulador_directorios[contador]);
-				//OBTENIENDO FICHEROS Y CARPETAS DEL DIRECTORIO
-				files = cliente.listFiles();
-				llenarLista(files);
-				//---------------------------------------------
+				JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
 			}
 
 
-		} catch (Exception e) 
-		{
-			System.out.println(e.getMessage());
 		}
-	}else 
-	{
-		if (ae.getSource().equals(boton_adelantar)) 
-		{
 
+
+
+
+
+
+		// -----------------BOTONES DE CABECERA---------------------
+
+		if (ae.getSource().equals(boton_volver)) 
+		{
 			try 
 			{			
-
-				if (acumulador_directorios[contador+1]!= null) 
+				if (contador > 0) 
 				{
-					contador++;
+					contador--;
+
 					System.out.println(acumulador_directorios[contador]);
 					directorioActual= acumulador_directorios[contador];
 					laber_directorio.setText(directorioActual);
@@ -777,57 +747,84 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 					//---------------------------------------------
 				}
 
+
 			} catch (Exception e) 
 			{
 				System.out.println(e.getMessage());
 			}
-
-
-		}
-		else 
+		}else 
 		{
-			if (ae.getSource().equals(boton_refrescar)) 
+			if (ae.getSource().equals(boton_adelantar)) 
 			{
 
 				try 
-				{
-					//OBTENIENDO FICHEROS Y CARPETAS DEL DIRECTORIO
-					files = cliente.listFiles();
-					llenarLista(files);
-					//---------------------------------------------
+				{			
+
+					if (acumulador_directorios[contador+1]!= null) 
+					{
+						contador++;
+						System.out.println(acumulador_directorios[contador]);
+						directorioActual= acumulador_directorios[contador];
+						laber_directorio.setText(directorioActual);
+						//SE ESTABLECE EL DIRECTORIO DE TRABAJO ACTUAL
+						cliente.changeWorkingDirectory(acumulador_directorios[contador]);
+						//OBTENIENDO FICHEROS Y CARPETAS DEL DIRECTORIO
+						files = cliente.listFiles();
+						llenarLista(files);
+						//---------------------------------------------
+					}
 
 				} catch (Exception e) 
 				{
 					System.out.println(e.getMessage());
 				}
+
+
 			}
 			else 
 			{
-				if (ae.getSource().equals(boton_home)) 
-				{	
+				if (ae.getSource().equals(boton_refrescar)) 
+				{
+
 					try 
 					{
-						acumulador_directorios = new String[50];//REINICIAMOS
-						acumulador_directorios[0] = "/";
-						contador=0; //REINICIAMOS EL CONTADOR DE RUTAS	
-						directorioActual = directorioInicial; //EL DIRECTORIO ACTUAL PASA A SER LA CARPETA RAÍZ
-						laber_directorio.setText(directorioActual);
-
-						cliente.changeWorkingDirectory(directorioInicial);//SE ESTABLECE EL DIRECTORIO ACTUAL DE TRABAJO
-
-						//OBTIENE LOS FICHEROS Y ARCHIVOS DEL DIRECTORIO
+						//OBTENIENDO FICHEROS Y CARPETAS DEL DIRECTORIO
 						files = cliente.listFiles();
-						llenarLista(files);//ACTUALIZA LA LISTA
+						llenarLista(files);
 						//---------------------------------------------
 
 					} catch (Exception e) 
 					{
 						System.out.println(e.getMessage());
-					}	
+					}
+				}
+				else 
+				{
+					if (ae.getSource().equals(boton_home)) 
+					{	
+						try 
+						{
+							acumulador_directorios = new String[50];//REINICIAMOS
+							acumulador_directorios[0] = "/";
+							contador=0; //REINICIAMOS EL CONTADOR DE RUTAS	
+							directorioActual = directorioInicial; //EL DIRECTORIO ACTUAL PASA A SER LA CARPETA RAÍZ
+							laber_directorio.setText(directorioActual);
+
+							cliente.changeWorkingDirectory(directorioInicial);//SE ESTABLECE EL DIRECTORIO ACTUAL DE TRABAJO
+
+							//OBTIENE LOS FICHEROS Y ARCHIVOS DEL DIRECTORIO
+							files = cliente.listFiles();
+							llenarLista(files);//ACTUALIZA LA LISTA
+							//---------------------------------------------
+
+						} catch (Exception e) 
+						{
+							System.out.println(e.getMessage());
+						}	
+					}
 				}
 			}
 		}
 	}
-}
 }
 
