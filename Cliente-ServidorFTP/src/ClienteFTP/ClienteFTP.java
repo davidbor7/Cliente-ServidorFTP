@@ -548,7 +548,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}	
 			else 
 			{
-				JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
+				JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
 			}
 		}
 
@@ -634,8 +634,13 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				} catch (Exception e) 
 				{
 					System.out.println(e.getMessage());
-				}								
-			}			
+				}
+				
+			}
+			else 
+			{
+				JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
+			}
 		}						
 
 
@@ -674,7 +679,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}
 			else 
 			{
-				JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
+				JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
 			}
 		}
 
