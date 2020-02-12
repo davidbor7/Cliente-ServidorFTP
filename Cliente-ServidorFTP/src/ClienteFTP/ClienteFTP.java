@@ -538,9 +538,9 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_renombrar_carpeta))
 		{
-			if (lista.getSelectedValue().toString()!=null) 
+			if (comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
 			{
-				String nombreNuevoCarpeta = JOptionPane.showInputDialog(null,"Introduce el nombre del directorio a eliminar","");
+				String nombreNuevoCarpeta = JOptionPane.showInputDialog(null,"Introduce el nombre de la carpeta a renombrar","");
 
 				String[] partes = lista.getSelectedValue().toString().split(" ");
 
@@ -572,7 +572,11 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					System.out.println(e.getMessage());
 				}
-			}			
+			}	
+			else 
+			{
+				 JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
+			}
 		}
 
 
@@ -694,7 +698,11 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					System.out.println(e.getMessage());
 				}
-			}		
+			}
+			else 
+			{
+				 JOptionPane.showMessageDialog(this, "OPCIÓN NO VÁLIDA");
+			}
 		}
 		
 		
