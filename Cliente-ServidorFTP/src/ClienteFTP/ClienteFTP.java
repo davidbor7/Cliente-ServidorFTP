@@ -198,6 +198,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 
 		// --- AÑADIMOS LOS LISTENER---
+		boton_borrar_fichero.addActionListener(this);
 		boton_subir_fichero.addActionListener(this);
 		boton_bajar_fichero.addActionListener(this);
 		boton_renombrar_carpeta.addActionListener(this);
@@ -319,6 +320,37 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	}
 
 
+	private void BorrarFichero(String NombreCompleto, String nombreFichero) 
+	{
+		//pide confirmaci�n
+		int seleccion = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el fichero seleccionado?");
+		if (seleccion == JOptionPane.OK_OPTION) 
+		{
+			try 
+			{
+				if (cliente.deleteFile(NombreCompleto)) 
+				{
+					String m = nombreFichero + " => Eliminado correctamente... ";
+					JOptionPane.showMessageDialog(null, m);
+					
+					//llenar la lista con los ficheros del directorio actual	
+					//Obteniendo ficheros y directorios del directorio actual
+					//RECARGAR LA LISTA
+					files = cliente.listFiles();
+					llenarLista(files);
+
+				}
+				else
+					JOptionPane.showMessageDialog(null, nombreFichero + " => No se ha podido eliminar ...");
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
+	}// Final de BorrarFichero
+	
+	
 	private boolean SubirFichero(String archivo, String soloNombre) throws IOException 
 	{
 		cliente.setFileType(FTP.BINARY_FILE_TYPE);
@@ -600,27 +632,36 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					System.out.println(e.getMessage());
 				}								
-			}		
-			/*		
-			String directorio = direcSelec;
-			if (!direcSelec.equals("/"))
-				directorio = directorio + "/";
-
-			String directorio_a_bajarString = 
-			String[] partes = lista.getSelectedValue().toString().split(" ");
-
-			String directorio_a_eliminar = directorioActual + partes[1];
-
-			if (!direcSelec.equals("")) 
-			{
-				DescargarFichero(directorio + ficheroSelec, ficheroSelec);
-			}
-			// Fin bot�n descargar
-			 * */
-
+			}				
 		}
 
+		if (ae.getSource().equals(boton_borrar_fichero))
+		{
 
+			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
+			{
+				//System.out.println("Es un archivo");
+
+				try 
+				{			
+										
+					String directorio_fichero_a_descargar = lista.getSelectedValue().toString();
+
+					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
+					
+					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
+					
+					BorrarFichero(directorioActual + directorio_fichero_a_descargar , directorio_fichero_a_descargar);
+
+
+				} catch (Exception e) 
+				{
+					System.out.println(e.getMessage());
+				}								
+			}				
+		}
+		
+		
 
 
 		// -----------------BOTONES DE CABECERA---------------------
