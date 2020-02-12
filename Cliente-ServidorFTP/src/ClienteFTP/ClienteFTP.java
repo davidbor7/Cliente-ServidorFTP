@@ -432,7 +432,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		if (ae.getSource().equals(boton_crear_carpeta)) 
 		{
 
-			String nombreCarpeta = JOptionPane.showInputDialog(null, "Introduce el nombre del directorio","carpeta");
+			String nombreCarpeta = JOptionPane.showInputDialog(null, "Introduce el nombre de la carpeta nueva","Carpeta");
 
 			if (!(nombreCarpeta==null)) 
 			{
