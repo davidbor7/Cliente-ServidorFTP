@@ -61,7 +61,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	private JButton boton_crear_carpeta;
 	private JButton boton_eliminar_carpeta;
 	private JButton boton_renombrar_carpeta;
-	private JButton renombrar_fichero;
+	private JButton boton_renombrar_fichero;
 	private JButton boton_bajar_fichero;
 	private JButton boton_subir_fichero;
 	private JButton boton_borrar_fichero;
@@ -149,9 +149,9 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		separator_1.setBounds(355, 224, 102, 2);
 		contentPane.add(separator_1);
 
-		renombrar_fichero = new JButton("Renombrar");
-		renombrar_fichero.setBounds(355, 306, 102, 23);
-		contentPane.add(renombrar_fichero);
+		boton_renombrar_fichero = new JButton("Renombrar");
+		boton_renombrar_fichero.setBounds(355, 306, 102, 23);
+		contentPane.add(boton_renombrar_fichero);
 
 		boton_bajar_fichero = new JButton("Bajar");
 		boton_bajar_fichero.setBounds(355, 272, 102, 23);
@@ -198,6 +198,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 
 		// --- AÑADIMOS LOS LISTENER---
+		boton_renombrar_fichero.addActionListener(this);
 		boton_borrar_fichero.addActionListener(this);
 		boton_subir_fichero.addActionListener(this);
 		boton_bajar_fichero.addActionListener(this);
@@ -660,6 +661,43 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				}								
 			}				
 		}
+		
+		
+		if (ae.getSource().equals(boton_renombrar_fichero)) 
+		{
+			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
+			{
+				String nombreNuevoFichero = JOptionPane.showInputDialog(null,"Introduce el nuevo nombre del fichero","");
+
+
+				//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
+				
+				//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
+
+				try 
+				{
+					cliente.rename(directorioActual + lista.getSelectedValue().toString(), directorioActual + nombreNuevoFichero);
+
+					//REFRESCAR LISTA CON LA NUEVA CARPETA
+					files = cliente.listFiles();
+					llenarLista(files);
+					//---------------------------------------------
+
+					//---------------BORRAR TODAS LAS RUTAS A PARTIR DE LA CARPETA EDITADA-----
+					//ESTO SE HACE PARA QUE NO DEN ERRROR EL BOTON DE ADELANTE, UNA VEZ QUE SE EDITA UNA CARPETA
+					for (int i = (contador+1); i < acumulador_directorios.length; i++) 
+					{		
+						System.out.println(acumulador_directorios[i]);
+						acumulador_directorios[i] = null;
+					}
+				} catch (Exception e) 
+				{
+					System.out.println(e.getMessage());
+				}
+			}		
+		}
+		
+		
 		
 		
 
