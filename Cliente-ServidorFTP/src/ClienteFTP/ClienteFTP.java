@@ -296,7 +296,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 	private void BorrarFichero(String NombreCompleto, String nombreFichero) 
 	{
-		//pide confirmaci�n
+		//Pide confirmación
 		int seleccion = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el fichero seleccionado?");
 		if (seleccion == JOptionPane.OK_OPTION) 
 		{
@@ -372,11 +372,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				if (comprueba_si_es_directorio(elementoSeleccionadoEnLaLista))  //COMPROBAMOS SI LO SELECCIONADO ES DE TIPO(DIR)
 				{
 
-					String partes [] = elementoSeleccionadoEnLaLista.split(" ");
-
 					//VA ACUMULANDO LAS RUTAS RECORRIDAS POR EL USUARIO
-					directorioActual = directorioActual  + partes[1] + "/";	 // partes[1] SELECIONA EL NOMBRE DE LA CARPETA Y ELIMINA EL PREFIJO (DIR)
-
+					directorioActual = directorioActual  + elementoSeleccionadoEnLaLista.substring(6) + "/"; //EL SUBSTING ES PARA QUITAR EL DIR DE DELANTE DE LAS CARPETAS
 					//System.out.println("El directorio actuar es: " + directorioActual);
 					laber_directorio.setText(directorioActual);
 
@@ -471,9 +468,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 				if (comprueba_si_es_directorio(nombreCarpeta)) //SI ENTRA AQUÍ SIGNIFICA QUE ESTAMOS QUERIENDO ELIMINAR UNA CARPETA
 				{
-					String[] partes = lista.getSelectedValue().toString().split(" ");
 
-					String directorio_a_eliminar = directorioActual + partes[1];
+					String directorio_a_eliminar = directorioActual + nombreCarpeta.substring(6);//EL SUBSTING ES PARA QUITAR EL DIR DE DELANTE DE LAS CARPETAS
 
 					//System.out.println(directorio_a_eliminar);
 
@@ -528,9 +524,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				{
 					String nombreNuevoCarpeta = JOptionPane.showInputDialog(null,"Introduce el nombre de la carpeta a renombrar","");
 
-					String[] partes = lista.getSelectedValue().toString().split(" ");
-
-					String directorio_a_renombrar = directorioActual + partes[1];
+					String directorio_a_renombrar = directorioActual + lista.getSelectedValue().toString().substring(6); //EL SUBSTING ES PARA QUITAR EL DIR DE DELANTE DE LAS CARPETAS
 
 					//System.out.println("El directorio a modificar es: " + nuevoDirectorio);
 
@@ -628,7 +622,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 					{
 						System.out.println(e.getMessage());
 					}								
-				}	
+				}
+
 			}
 			else 
 			{
@@ -680,10 +675,11 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			if (!lista.isSelectionEmpty()) 
 			{
 				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
-				{
+				{				
+					
 					String nombreNuevoFichero = JOptionPane.showInputDialog(null,"Introduce el nuevo nombre del fichero","");
-
-
+		
+			
 					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
 
 					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
