@@ -580,14 +580,44 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		if (ae.getSource().equals(boton_bajar_fichero))
 		{
 
+			if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
+			{
+				//System.out.println("Es un archivo");
+
+				try 
+				{			
+										
+					String directorio_fichero_a_descargar = lista.getSelectedValue().toString();
+
+					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
+					
+					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
+					
+					DescargarFichero(directorioActual + directorio_fichero_a_descargar , directorio_fichero_a_descargar);
+
+
+				} catch (Exception e) 
+				{
+					System.out.println(e.getMessage());
+				}								
+			}		
+			/*		
 			String directorio = direcSelec;
 			if (!direcSelec.equals("/"))
 				directorio = directorio + "/";
+
+			String directorio_a_bajarString = 
+			String[] partes = lista.getSelectedValue().toString().split(" ");
+
+			String directorio_a_eliminar = directorioActual + partes[1];
+
 			if (!direcSelec.equals("")) 
 			{
 				DescargarFichero(directorio + ficheroSelec, ficheroSelec);
 			}
 			// Fin bot�n descargar
+			 * */
+
 		}
 
 
