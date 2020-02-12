@@ -317,7 +317,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		}
 
 	}
-	
+
+
 	private boolean SubirFichero(String archivo, String soloNombre) throws IOException 
 	{
 		cliente.setFileType(FTP.BINARY_FILE_TYPE);
@@ -329,22 +330,19 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		{
 			String s = " " + soloNombre + " => Subido correctamente...";
 			JOptionPane.showMessageDialog(null, s);
-			FTPFile[] ff2 = null;
-			//obtener ficheros del directorio actual
-			ff2 = cliente.listFiles();
-			
+
 			//llenar la lista con los ficheros del directorio actual	
 			//Obteniendo ficheros y directorios del directorio actual
 			files = cliente.listFiles();
 			llenarLista(files);
-			
+
 		}
 		else
 			JOptionPane.showMessageDialog(null, "=> Error al subir el archivo...");
 		return ok;
 	}// final de SubirFichero
-	
-	
+
+
 
 	public void valueChanged(ListSelectionEvent le) 
 	{
@@ -514,7 +512,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				String[] partes = lista.getSelectedValue().toString().split(" ");
 
 				String directorio_a_renombrar = directorioActual + partes[1];
-				
+
 				//System.out.println("El directorio a modificar es: " + nuevoDirectorio);
 
 				String nuevoDirectorio = acumulador_directorios[contador] + nombreNuevoCarpeta;
@@ -547,7 +545,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_subir_fichero))
 		{
-			
+
 			JFileChooser f;
 			File file;
 			f = new JFileChooser();
@@ -574,21 +572,22 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 					e1.printStackTrace(); 
 				}
 			}
-			
-			
+
+
 		}
 
 
 		if (ae.getSource().equals(boton_bajar_fichero))
 		{
-			String directorio = directorioActual;
 
-			if (!directorioActual.equals("/"))
+			String directorio = direcSelec;
+			if (!direcSelec.equals("/"))
 				directorio = directorio + "/";
-			if (!directorioActual.equals("")) 
+			if (!direcSelec.equals("")) 
 			{
 				DescargarFichero(directorio + ficheroSelec, ficheroSelec);
 			}
+			// Fin bot�n descargar
 		}
 
 
@@ -677,14 +676,14 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 							contador=0; //REINICIAMOS EL CONTADOR DE RUTAS	
 							directorioActual = directorioInicial; //EL DIRECTORIO ACTUAL PASA A SER LA CARPETA RAÍZ
 							laber_directorio.setText(directorioActual);
-							
+
 							cliente.changeWorkingDirectory(directorioInicial);//SE ESTABLECE EL DIRECTORIO ACTUAL DE TRABAJO
-							
+
 							//OBTIENE LOS FICHEROS Y ARCHIVOS DEL DIRECTORIO
 							files = cliente.listFiles();
 							llenarLista(files);//ACTUALIZA LA LISTA
 							//---------------------------------------------
-							
+
 						} catch (Exception e) 
 						{
 							System.out.println(e.getMessage());
