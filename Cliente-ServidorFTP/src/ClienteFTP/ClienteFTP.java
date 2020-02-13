@@ -67,15 +67,15 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		contentPane.add(scrollPane);
 
 		boton_crear_carpeta = new JButton("Crear");
-		boton_crear_carpeta.setBounds(355, 88, 102, 23);
+		boton_crear_carpeta.setBounds(355, 99, 102, 23);
 		contentPane.add(boton_crear_carpeta);
 
 		boton_eliminar_carpeta = new JButton("Eliminar");
-		boton_eliminar_carpeta.setBounds(355, 122, 102, 23);
+		boton_eliminar_carpeta.setBounds(355, 133, 102, 23);
 		contentPane.add(boton_eliminar_carpeta);
 
 		boton_renombrar_carpeta = new JButton("Renombrar");
-		boton_renombrar_carpeta.setBounds(355, 156, 102, 23);
+		boton_renombrar_carpeta.setBounds(355, 167, 102, 23);
 		contentPane.add(boton_renombrar_carpeta);
 
 		boton_volver = new JButton("");
@@ -102,38 +102,38 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(new Color(173, 255, 47));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 17));
-		lblNewLabel.setBounds(355, 36, 102, 23);
+		lblNewLabel.setBounds(355, 47, 102, 23);
 		contentPane.add(lblNewLabel);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(355, 70, 102, 2);
+		separator.setBounds(355, 81, 102, 2);
 		contentPane.add(separator);
 
 		JLabel lblFicheros = new JLabel("FICHEROS");
 		lblFicheros.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFicheros.setForeground(new Color(173, 255, 47));
 		lblFicheros.setFont(new Font("Arial", Font.BOLD, 17));
-		lblFicheros.setBounds(355, 190, 102, 23);
+		lblFicheros.setBounds(355, 201, 102, 23);
 		contentPane.add(lblFicheros);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(355, 224, 102, 2);
+		separator_1.setBounds(355, 235, 102, 2);
 		contentPane.add(separator_1);
 
 		boton_renombrar_fichero = new JButton("Renombrar");
-		boton_renombrar_fichero.setBounds(355, 306, 102, 23);
+		boton_renombrar_fichero.setBounds(355, 317, 102, 23);
 		contentPane.add(boton_renombrar_fichero);
 
 		boton_bajar_fichero = new JButton("Bajar");
-		boton_bajar_fichero.setBounds(355, 272, 102, 23);
+		boton_bajar_fichero.setBounds(355, 283, 102, 23);
 		contentPane.add(boton_bajar_fichero);
 
 		boton_subir_fichero = new JButton("Subir");
-		boton_subir_fichero.setBounds(355, 238, 102, 23);
+		boton_subir_fichero.setBounds(355, 249, 102, 23);
 		contentPane.add(boton_subir_fichero);
 
 		boton_borrar_fichero = new JButton("Borrar");
-		boton_borrar_fichero.setBounds(355, 340, 102, 23);
+		boton_borrar_fichero.setBounds(355, 351, 102, 23);
 		contentPane.add(boton_borrar_fichero);
 
 		laber_directorio = new JLabel("");
@@ -193,7 +193,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 	}
 
-	private void DescargarFichero(String NombreCompleto, String nombreFichero) 
+	public void DescargarFichero(String NombreCompleto, String nombreFichero) 
 	{
 		File file;
 		String archivoyCarpetaDestino = "";
@@ -290,7 +290,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	}
 
 
-	private void BorrarFichero(String NombreCompleto, String nombreFichero) 
+	public void BorrarFichero(String NombreCompleto, String nombreFichero) 
 	{
 		//Pide confirmación
 		int seleccion = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el fichero seleccionado?");
@@ -321,7 +321,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	}// Final de BorrarFichero
 
 
-	private boolean SubirFichero(String archivo, String soloNombre) throws IOException 
+	public boolean SubirFichero(String archivo, String soloNombre) throws IOException 
 	{
 		cliente.setFileType(FTP.BINARY_FILE_TYPE);
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(archivo));
@@ -350,8 +350,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		//  --  CONECTAMOS AL SERVIDOR -- 
 		try 
 		{
-			cliente.connect(servidor); 
 			cliente.enterLocalPassiveMode();//IMPORTANTE
+			cliente.connect(servidor); 
 			cliente.login(user, pasw); //Si el boolean login devuelve true, significa que se ha conectado exitosamente.
 			System.out.println("Conexión realizada con éxito.");
 		} catch (Exception e) 
@@ -371,9 +371,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	@Override
 	public void mouseClicked(MouseEvent me) 
 	{
-
 		try 
-		{
+		{						
 			if (me.getClickCount() == 2) //SI EL USUARIO HACE CLIC DOS VECES
 			{
 				
@@ -832,4 +831,3 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		}
 	}
 }
-
