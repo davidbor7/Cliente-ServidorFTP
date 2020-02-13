@@ -4,6 +4,7 @@ package ClienteFTP;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -149,7 +150,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		lblDirectorio.setBounds(10, 432, 101, 27);
 		contentPane.add(lblDirectorio);
 
-	
+
 		// --- AÑADIMOS LOS LISTENER---
 		boton_renombrar_fichero.addActionListener(this);
 		boton_borrar_fichero.addActionListener(this);
@@ -168,11 +169,15 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		setLocationRelativeTo(null);
 		setVisible(true);
 
+		//Para ver los comandos que se originan
+		cliente.addProtocolCommandListener(new PrintCommandListener(new PrintWriter (System.out)));
+
 		//-----------------------------------------
-		
+
 		realiza_conexion();
 
 		// --- RELLENAMOS LA JLIST POR PRIMERA VEZ---
+
 
 		//Se establece el directorio de trabajo actual
 		cliente.changeWorkingDirectory(directorioInicial);
@@ -181,9 +186,9 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		llenarLista(files);
 
 		//---------------------------------------------
-		
-		
-		
+
+
+
 	}
 
 	public static void main(String[] args) throws IOException
@@ -249,19 +254,18 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				//Nos saltamos los directorios . y ..
 				//Se obtiene el nombre del fichero o directorio
 				String f = files[i].getName();
-				
+
 				try 
 				{
 					String z = new String(f.getBytes("ISO-8859-1"), "UTF-8");  //CAMBIAMOS EL FORMATO DEL STRING PARA QUE SE VEAN LAS TILDES
-				
-				//Si es directorio se añade al nombre (DIR)
-				if (files[i].isDirectory()) z = "(DIR) " + z;
-				//Se añaade el nombre del fichero o directorio al listmodel
-				modeloLista.addElement(z);
-				
+
+					//Si es directorio se añade al nombre (DIR)
+					if (files[i].isDirectory()) z = "(DIR) " + z;
+					//Se añaade el nombre del fichero o directorio al listmodel
+					modeloLista.addElement(z);
+
 				} catch (Exception e) 
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -271,7 +275,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		{
 			//Se asigna el modelo al JList
 			//Se muestra en pantalla la lista de ficheros
-			
+
 			lista.setModel(modeloLista);
 
 			//System.out.println("El directorioSeleccionado vale: " + directorioActual);
@@ -386,7 +390,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		{						
 			if (me.getClickCount() == 2) //SI EL USUARIO HACE CLIC DOS VECES
 			{
-				
+
 				String elementoSeleccionadoEnLaLista = lista.getSelectedValue().toString();
 
 				if (comprueba_si_es_directorio(elementoSeleccionadoEnLaLista))  //COMPROBAMOS SI LO SELECCIONADO ES DE TIPO(DIR)
@@ -446,12 +450,12 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		// ---------------BOTONES DE ACCIÓN-----------
 
-				
-		
+
+
 		if (ae.getSource().equals(boton_crear_carpeta)) 
 		{
-					
-			String nombreCarpeta = JOptionPane.showInputDialog(null, "Introduce el nombre de la carpeta nueva","Carpeta");
+
+			String nombreCarpeta = JOptionPane.showInputDialog(null, "Introduce el nombre de la carpeta nueva","Nueva Carpeta");
 
 			if (!(nombreCarpeta==null)) 
 			{
@@ -483,7 +487,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_eliminar_carpeta))
 		{
-						
+
 			if (!lista.isSelectionEmpty())
 			{
 				String nombreCarpeta = lista.getSelectedValue().toString();
@@ -540,7 +544,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_renombrar_carpeta))
 		{				
-			
+
 			if (!lista.isSelectionEmpty())
 			{
 				if (comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
@@ -590,7 +594,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_subir_fichero))
 		{
-							
+
 			JFileChooser f;
 			File file;
 			f = new JFileChooser();
@@ -660,7 +664,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_borrar_fichero))
 		{
-			
+
 			if (!lista.isSelectionEmpty()) 
 			{
 				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
@@ -698,15 +702,15 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_renombrar_fichero)) 
 		{
-			
+
 			if (!lista.isSelectionEmpty()) 
 			{
 				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
 				{				
-					
+
 					String nombreNuevoFichero = JOptionPane.showInputDialog(null,"Introduce el nuevo nombre del fichero","");
-		
-			
+
+
 					//System.out.println("*EL ARCHIVO A DESCARGAR ES: * " + directorio_fichero_a_descargar);
 
 					//System.out.println("LA RUTA DEL ARCHIVO ES: * " + directorioActual+ directorio_fichero_a_descargar);
@@ -748,7 +752,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_volver)) 
 		{
-									
+
 			try 
 			{			
 				if (contador > 0) 
@@ -773,10 +777,10 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}
 		}else 
 		{
-				
+
 			if (ae.getSource().equals(boton_adelantar)) 
 			{	
-								
+
 				try 
 				{			
 
@@ -846,3 +850,18 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		}
 	}
 }
+
+///------------------------------------------------------------------------------
+/*
+ * 
+ * LA APLICACIÓN SE DESCONECTA CADA POCO TIEMPO DEL SERVIDOR FTP, ESTO ES DEBIDO A MEDIDAS DE SEGURIDAD
+ * NO ES UN ERROR DEL PROGRAMA. MENSAJE DE ERROR: Software caused connection abort: recv failed
+ * 
+ * 
+ * 
+ */
+
+
+
+
+
