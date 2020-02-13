@@ -646,6 +646,10 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 						System.out.println(e.getMessage());
 					}								
 				}
+				else 
+				{
+					JOptionPane.showMessageDialog(this, "*****OPCIÓN NO VÁLIDA*****");
+				}
 
 			}
 			else 
