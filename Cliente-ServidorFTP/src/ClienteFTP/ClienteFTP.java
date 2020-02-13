@@ -249,10 +249,21 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				//Nos saltamos los directorios . y ..
 				//Se obtiene el nombre del fichero o directorio
 				String f = files[i].getName();
+				
+				try 
+				{
+					String z = new String(f.getBytes("ISO-8859-1"), "UTF-8");  //CAMBIAMOS EL FORMATO DEL STRING PARA QUE SE VEAN LAS TILDES
+				
 				//Si es directorio se añade al nombre (DIR)
-				if (files[i].isDirectory()) f = "(DIR) " + f;
+				if (files[i].isDirectory()) z = "(DIR) " + z;
 				//Se añaade el nombre del fichero o directorio al listmodel
-				modeloLista.addElement(f);
+				modeloLista.addElement(z);
+				
+				} catch (Exception e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 
