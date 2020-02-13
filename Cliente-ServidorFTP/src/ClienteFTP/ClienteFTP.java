@@ -37,7 +37,6 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	private JButton boton_bajar_fichero;
 	private JButton boton_subir_fichero;
 	private JButton boton_borrar_fichero;
-	static String ficheroSelec = "";
 	/**
 	 * Create the frame.
 	 */
@@ -150,25 +149,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		lblDirectorio.setBounds(10, 432, 101, 27);
 		contentPane.add(lblDirectorio);
 
-		//  --  CONECTAMOS AL SERVIDOR -- 
-
-		//Conexión al servidor
-		cliente.connect(servidor); 
-		cliente.enterLocalPassiveMode();
-		cliente.login(user, pasw); //Si el boolean login devuelve true, significa que se ha conectado exitosamente.
-
-
-		// --- RELLENAMOS LA JLIST POR PRIMERA VEZ---
-
-		//Se establece el directorio de trabajo actual
-		cliente.changeWorkingDirectory(directorioInicial);
-		//Obteniendo ficheros y directorios del directorio actual
-		files = cliente.listFiles();
-		llenarLista(files);
-
-		//---------------------------------------------
-
-
+	
 		// --- AÑADIMOS LOS LISTENER---
 		boton_renombrar_fichero.addActionListener(this);
 		boton_borrar_fichero.addActionListener(this);
@@ -187,7 +168,22 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		setLocationRelativeTo(null);
 		setVisible(true);
 
+		//-----------------------------------------
+		
+		realiza_conexion();
 
+		// --- RELLENAMOS LA JLIST POR PRIMERA VEZ---
+
+		//Se establece el directorio de trabajo actual
+		cliente.changeWorkingDirectory(directorioInicial);
+		//Obteniendo ficheros y directorios del directorio actual
+		files = cliente.listFiles();
+		llenarLista(files);
+
+		//---------------------------------------------
+		
+		
+		
 	}
 
 	public static void main(String[] args) throws IOException
@@ -349,6 +345,20 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 	}// final de SubirFichero
 
 
+	public void realiza_conexion()
+	{		
+		//  --  CONECTAMOS AL SERVIDOR -- 
+		try 
+		{
+			cliente.connect(servidor); 
+			cliente.enterLocalPassiveMode();//IMPORTANTE
+			cliente.login(user, pasw); //Si el boolean login devuelve true, significa que se ha conectado exitosamente.
+			System.out.println("Conexión realizada con éxito.");
+		} catch (Exception e) 
+		{
+			System.out.println(e.getMessage());
+		} 		
+	}
 
 	public void valueChanged(ListSelectionEvent le) 
 	{
@@ -366,7 +376,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 		{
 			if (me.getClickCount() == 2) //SI EL USUARIO HACE CLIC DOS VECES
 			{
-
+				
 				String elementoSeleccionadoEnLaLista = lista.getSelectedValue().toString();
 
 				if (comprueba_si_es_directorio(elementoSeleccionadoEnLaLista))  //COMPROBAMOS SI LO SELECCIONADO ES DE TIPO(DIR)
@@ -426,9 +436,11 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		// ---------------BOTONES DE ACCIÓN-----------
 
+				
+		
 		if (ae.getSource().equals(boton_crear_carpeta)) 
 		{
-
+					
 			String nombreCarpeta = JOptionPane.showInputDialog(null, "Introduce el nombre de la carpeta nueva","Carpeta");
 
 			if (!(nombreCarpeta==null)) 
@@ -461,7 +473,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_eliminar_carpeta))
 		{
-
+						
 			if (!lista.isSelectionEmpty())
 			{
 				String nombreCarpeta = lista.getSelectedValue().toString();
@@ -517,7 +529,8 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 
 		if (ae.getSource().equals(boton_renombrar_carpeta))
-		{
+		{				
+			
 			if (!lista.isSelectionEmpty())
 			{
 				if (comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
@@ -567,7 +580,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_subir_fichero))
 		{
-
+							
 			JFileChooser f;
 			File file;
 			f = new JFileChooser();
@@ -598,7 +611,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 
 		if (ae.getSource().equals(boton_bajar_fichero))
-		{
+		{						
 
 			if (!lista.isSelectionEmpty()) 
 			{
@@ -633,7 +646,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_borrar_fichero))
 		{
-
+			
 			if (!lista.isSelectionEmpty()) 
 			{
 				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
@@ -671,7 +684,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 
 		if (ae.getSource().equals(boton_renombrar_fichero)) 
 		{
-
+			
 			if (!lista.isSelectionEmpty()) 
 			{
 				if (!comprueba_si_es_directorio(lista.getSelectedValue().toString())) 
@@ -714,19 +727,14 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			{
 				JOptionPane.showMessageDialog(this, "*****SELECCIONE UN FICHERO*****");
 			}
-
-
 		}
-
-
-
-
 
 
 		// -----------------BOTONES DE CABECERA---------------------
 
 		if (ae.getSource().equals(boton_volver)) 
 		{
+									
 			try 
 			{			
 				if (contador > 0) 
@@ -751,9 +759,10 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			}
 		}else 
 		{
+				
 			if (ae.getSource().equals(boton_adelantar)) 
-			{
-
+			{	
+								
 				try 
 				{			
 
@@ -781,8 +790,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 			else 
 			{
 				if (ae.getSource().equals(boton_refrescar)) 
-				{
-
+				{									
 					try 
 					{
 						//OBTENIENDO FICHEROS Y CARPETAS DEL DIRECTORIO
@@ -798,7 +806,7 @@ public class ClienteFTP extends JFrame implements ListSelectionListener, MouseLi
 				else 
 				{
 					if (ae.getSource().equals(boton_home)) 
-					{	
+					{																					
 						try 
 						{
 							acumulador_directorios = new String[50];//REINICIAMOS
